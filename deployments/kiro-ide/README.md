@@ -148,8 +148,12 @@ aws ec2 start-instances --instance-ids <InstanceId>
 ```
 
 **Cost comparison (24/7 vs 8hrs/day, weekdays only):**
-- 24/7 operation: ~$120-160/month (730 hours)
-- Part-time usage: ~$27-35/month (160 hours)
+- 24/7 operation (730 hours/month):
+  - Tokyo: ~$157/month
+  - US regions: ~$121/month
+- Part-time usage (160 hours/month):
+  - Tokyo: ~$35/month
+  - US regions: ~$27/month
 
 ### Spot Instances
 For non-production use, consider modifying the template to use Spot instances (up to 90% savings).

@@ -71,7 +71,7 @@ Access the URL and log in with the displayed username and password.
 
 ## Pricing
 
-The primary cost for Kiro IDE Remote deployment is the EC2 instance. Here are estimated monthly costs when using the default `t3.xlarge` instance:
+The primary cost for Kiro IDE Remote deployment is the EC2 instance. Here are estimated monthly costs when using the default `t3.xlarge` instance (on-demand pricing, as of December 2024):
 
 ### Running 24/7 (730 hours/month)
 
