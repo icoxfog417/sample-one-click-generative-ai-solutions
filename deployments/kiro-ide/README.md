@@ -40,7 +40,7 @@ This directory contains CloudFormation templates for deploying Kiro IDE Remote o
 | **LTS Duration** | ~2 years | 5 years |
 | **Community** | AWS-focused | Large Ubuntu community |
 | **Setup Time** | 15-20 min | 15-20 min |
-| **Cost** | ~$50-60/month | ~$50-60/month |
+| **Cost** | ~$120-160/month (24/7) | ~$120-160/month (24/7) |
 
 ## Quick Start
 
@@ -53,7 +53,7 @@ aws cloudformation create-stack \
   --capabilities CAPABILITY_IAM \
   --parameters '[
     {"ParameterKey": "UserEmail", "ParameterValue": "your-email@example.com"},
-    {"ParameterKey": "InstanceType", "ParameterValue": "t3.medium"},
+    {"ParameterKey": "InstanceType", "ParameterValue": "t3.xlarge"},
     {"ParameterKey": "Language", "ParameterValue": "EN"}
   ]'
 ```
@@ -67,7 +67,7 @@ aws cloudformation create-stack \
   --capabilities CAPABILITY_IAM \
   --parameters '[
     {"ParameterKey": "UserEmail", "ParameterValue": "your-email@example.com"},
-    {"ParameterKey": "InstanceType", "ParameterValue": "t3.medium"},
+    {"ParameterKey": "InstanceType", "ParameterValue": "t3.xlarge"},
     {"ParameterKey": "Language", "ParameterValue": "EN"}
   ]'
 ```
@@ -80,7 +80,7 @@ Both templates share the same parameters:
 |-----------|-------------|---------|----------|
 | `UserEmail` | Email for notifications | - | Yes |
 | `UserFullName` | Full name for Git config | Kiro IDE Developer | No |
-| `InstanceType` | EC2 instance type | t3.medium | No |
+| `InstanceType` | EC2 instance type | t3.xlarge | No |
 | `InstanceVolumeSize` | EBS volume size (GB) | 40 | No |
 | `RepoUrl` | Git repository to clone | (empty) | No |
 | `Language` | OS language (EN/JP) | EN | No |
@@ -147,14 +147,18 @@ aws ec2 stop-instances --instance-ids <InstanceId>
 aws ec2 start-instances --instance-ids <InstanceId>
 ```
 
+**Cost comparison (24/7 vs 8hrs/day, weekdays only):**
+- 24/7 operation: ~$120-160/month (730 hours)
+- Part-time usage: ~$27-35/month (160 hours)
+
 ### Spot Instances
 For non-production use, consider modifying the template to use Spot instances (up to 90% savings).
 
 ### Right-sizing
 Monitor CPU/memory usage and adjust instance type:
-- Light work: `t3.small` ($15/month)
-- Standard: `t3.medium` ($30/month)
-- Heavy: `t3.large` ($60/month)
+- Light work: `t3.medium` ($30-40/month for 24/7)
+- **Standard (recommended)**: `t3.xlarge` ($120-160/month for 24/7, provides stable performance)
+- Heavy compute: `t3.2xlarge` ($240-320/month for 24/7)
 
 ## Troubleshooting
 

@@ -36,7 +36,7 @@ You can deploy using the button below. Click after logging into AWS.
 * UserFullName
     * User's full name. Used for Git configuration and other settings (default: Kiro IDE Developer).
 * InstanceType
-    * EC2 instance type (default: t3.medium).
+    * EC2 instance type (default: t3.xlarge). Provides sufficient CPU resources for stable Kiro IDE operation.
 * InstanceVolumeSize
     * EBS volume size in GB (default: 40).
 * RepoUrl
@@ -68,6 +68,39 @@ Access the URL and log in with the displayed username and password.
 
 * If authentication with Kiro CLI is slow to proceed, try `kiro-cli login --use-device-flow`.
 * Copy & Paste to terminal uses **Ctrl + Shift + V**. This is standard Linux behavior.
+
+## Pricing
+
+The primary cost for Kiro IDE Remote deployment is the EC2 instance. Here are estimated monthly costs when using the default `t3.xlarge` instance:
+
+### Running 24/7 (730 hours/month)
+
+- **Tokyo Region (ap-northeast-1)**: ~$156.85/month
+- **Virginia Region (us-east-1)**: ~$121.47/month
+- **Oregon Region (us-west-2)**: ~$121.47/month
+
+### Cost Optimization Recommendations
+
+**You can significantly reduce costs by stopping the instance when not in use.**
+
+Example: Using 8 hours/day on weekdays only (160 hours/month)
+
+- **Tokyo Region**: ~$34.82/month
+- **US Regions**: ~$26.62/month
+
+You can stop and start the instance using these commands:
+
+```bash
+# Stop instance
+aws ec2 stop-instances --instance-ids <InstanceId>
+
+# Start instance
+aws ec2 start-instances --instance-ids <InstanceId>
+```
+
+Additional costs include CloudFront, ALB, EBS, and data transfer, which typically amount to a few dollars per month for standard development usage.
+
+**Note**: Pricing is subject to change. Please check the latest pricing at the [EC2 Pricing Page](https://aws.amazon.com/ec2/pricing/on-demand/).
 
 ## Related Links
 
