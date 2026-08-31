@@ -44,13 +44,13 @@ AI Agent Development Code Server は、Amazon Bedrock Agent Core を活用した
     - デプロイ完了通知もこのアドレスに送信されます。
 - **UserFullName** (デフォルト: AIAgent Developer)
     - Git 設定に使用されるフルネームです。
-- **InstanceType** (デフォルト: t4g.xlarge)
+- **InstanceType** (デフォルト: t4g.large)
     - EC2 インスタンスタイプです。ARM64 アーキテクチャ (Graviton) のインスタンスを使用します。性能、価格は以下を目安にしてください。特に価格は[最新の情報](https://aws.amazon.com/jp/ec2/pricing/on-demand/)を確認することを推奨します。ハイパフォーマンスな環境が必要な場合、m7g/c7g を検討ください。
     - t4g.medium : 2 vCPU + 4G メモリ, 24 時間で 120 円ぐらい (エージェント実行には非推奨)
-    - t4g.large : 2 vCPU + 8G メモリ, 24 時間で 250 円ぐらい
-    - t4g.xlarge : 4 vCPU + 16G メモリ, 24 時間で 480 円ぐらい (デフォルト)
+    - t4g.large : 2 vCPU + 8G メモリ, 24 時間で 250 円ぐらい (デフォルト)
+    - t4g.xlarge : 4 vCPU + 16G メモリ, 24 時間で 480 円ぐらい (コンテナビルドを多用する場合)
     - t4g.2xlarge : 8 vCPU + 32G メモリ
-    - メモリについて: code-server、言語サーバー、エージェント CLI のセッション、`agentcore dev` で起動するローカルエージェントが同時に動作するため、8G 以下では OOM でハングアップする可能性があります。
+    - メモリについて: code-server、エージェント CLI のセッション、`agentcore dev` で起動するローカルエージェント、Docker が同時に動作します。4G (t4g.medium) では OOM でハングアップする可能性があるため、8G 以上を推奨します。
 - **InstanceVolumeSize** (デフォルト: 40)
     - EBS ボリュームサイズ (GB) です。
 - **HomeFolder** (デフォルト: /workshop)
@@ -96,7 +96,7 @@ AI Agent Development Code Server は、Amazon Bedrock Agent Core を活用した
 
 主なコストは以下のリソースから発生します：
 
-- **EC2 インスタンス** - t4g.xlarge (4 vCPU, 16GB メモリ) の実行時間に応じた課金 (オンデマンドで 24 時間使った場合 480 円程度です)
+- **EC2 インスタンス** - t4g.large (2 vCPU, 8GB メモリ) の実行時間に応じた課金 (オンデマンドで 24 時間使った場合 250 円程度です)
 - **EBS ボリューム** - 40GB (デフォルト) の gp3 ストレージ料金
 - **CloudFront** - データ転送量に応じた課金
 - **その他** - VPC、Secrets Manager、SNS などの最小限のコスト
