@@ -77,7 +77,7 @@ AI Agent Development Code Server は、Amazon Bedrock Agent Core を活用した
 - **AWS ツール**: AgentCore CLI (`agentcore`)、AWS CLI v2、AWS SAM CLI、Kiro CLI
 - **AI コーディングツール**: Kiro CLI、Claude Code (`claude`)
 - **開発ツール**: Git、Docker、Python、UV、NVM (Node.js LTS、NPM)
-- **エディタ**: Code-Server (Claude Code、Python、Ruff、YAML 拡張機能を同梱)
+- **エディタ**: Code-Server (Claude Code 拡張機能を同梱。その他の拡張機能はディスク容量を抑えるため既定では導入していません)
 
 環境変数も自動設定されます：
 

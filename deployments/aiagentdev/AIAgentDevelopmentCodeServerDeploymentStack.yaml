@@ -291,7 +291,7 @@ Resources:
             inputs:
               runCommand:
                 - apt-get update
-                - DEBIAN_FRONTEND=noninteractive apt-get install -y curl gnupg unzip nginx openssl jq git python3-pip python3-venv wget
+                - DEBIAN_FRONTEND=noninteractive apt-get install -y curl gnupg unzip nginx openssl jq git python3-pip python3-venv wget zstd
                 - curl -fsSL https://download.docker.com/linux/ubuntu/gpg | gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
                 - echo "deb [signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu $(lsb_release --codename --short) stable" > /etc/apt/sources.list.d/docker.list
                 - apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y docker-ce docker-ce-cli containerd.io
@@ -349,6 +349,26 @@ Resources:
                   sudo -u $USERNAME bash /tmp/install-kiro-cli.sh 2>&1
                   echo "Kiro CLI installed. Checking configuration"
                   sudo -i -u $USERNAME kiro-cli --version
+          - name: InstallClaudeCode
+            action: aws:runShellScript
+            inputs:
+              timeoutSeconds: 600
+              runCommand:
+                - '#!/bin/bash'
+                - set -euo pipefail
+                - |
+                  USERNAME=$(cat /etc/aiagentdev-username)
+                  # Native installer: one checksum-verified binary, no Node.js dependency,
+                  # and self-updating via "claude update".
+                  curl -fsSL https://claude.ai/install.sh -o /tmp/install-claude-code.sh
+                  chown $USERNAME:$USERNAME /tmp/install-claude-code.sh
+                  sudo -u $USERNAME bash /tmp/install-claude-code.sh 2>&1
+                  # code-server runs under systemd, whose default PATH covers /usr/local/bin
+                  # but never ~/.local/bin, so the Claude Code extension cannot find the CLI
+                  # without this link. Pointing at the symlink keeps self-updates working.
+                  ln -sf /home/$USERNAME/.local/bin/claude /usr/local/bin/claude
+                  echo "Claude Code installed. Checking configuration"
+                  sudo -i -u $USERNAME claude --version
           - name: Installuv
             action: aws:runShellScript
             inputs:
@@ -368,18 +388,15 @@ Resources:
                   USERNAME=$(cat /etc/aiagentdev-username)
                   sudo -u $USERNAME curl -fsSL https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.1/install.sh -o /tmp/nvm_install.sh
                   sudo -u $USERNAME bash /tmp/nvm_install.sh
-                  # The CLIs are installed in the same shell as "nvm use": nvm puts node and
+                  # The CLI is installed in the same shell as "nvm use": nvm puts node and
                   # npm on PATH only for the current shell, and each SSM step runs in a new one.
                   sudo -u $USERNAME bash <<EOF
                   export NVM_DIR="/home/$USERNAME/.nvm"
                   source "\$NVM_DIR/nvm.sh"
                   nvm install --lts
                   nvm use --lts
-                  # --allow-scripts: npm >=11 blocks postinstall by default, and the Claude Code
-                  # postinstall is what selects the arm64 native binary for this instance.
-                  npm install -g --allow-scripts=@aws/agentcore,@anthropic-ai/claude-code @aws/agentcore @anthropic-ai/claude-code
+                  npm install -g @aws/agentcore
                   agentcore --version
-                  claude --version
                   EOF
           - name: CloneRepo
             action: aws:runShellScript
@@ -455,10 +472,6 @@ Resources:
                     return 0
                   }
                   install_extension "anthropic.claude-code" || exit 1
-                  install_extension "ms-python.python" || exit 1
-                  install_extension "ms-python.debugpy" || exit 1
-                  install_extension "charliermarsh.ruff" || exit 1
-                  install_extension "redhat.vscode-yaml" || exit 1
           - name: StartServices
             action: aws:runShellScript
             inputs:

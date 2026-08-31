@@ -77,7 +77,7 @@ The development environment comes with the following pre-installed tools:
 - **AWS Tools**: AgentCore CLI (`agentcore`), AWS CLI v2, AWS SAM CLI, Kiro CLI
 - **AI Coding Tools**: Kiro CLI, Claude Code (`claude`)
 - **Development Tools**: Git, Docker, Python, UV, NVM (Node.js LTS, NPM)
-- **Editor**: Code-Server (bundled with Claude Code, Python, Ruff and YAML extensions)
+- **Editor**: Code-Server (bundled with the Claude Code extension; no other extensions are installed by default, to keep disk usage minimal)
 
 Environment variables are automatically configured:
 
