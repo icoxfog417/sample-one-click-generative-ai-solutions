@@ -46,10 +46,13 @@ You can configure the following parameters during deployment:
     - Full name used for Git configuration.
 - **InstanceType** (Default: t4g.large)
     - EC2 instance type. Uses ARM64 architecture (Graviton) instances. Use the following as a guide for performance and pricing. We recommend checking the [latest pricing information](https://aws.amazon.com/ec2/pricing/on-demand/). Consider m7g/c7g if you need a higher-performance environment.
-    - t4g.medium: 2 vCPU + 4GB memory, approximately $0.72/24 hours (not recommended for running agents)
-    - t4g.large: 2 vCPU + 8GB memory, approximately $1.68/24 hours (default)
-    - t4g.xlarge: 4 vCPU + 16GB memory, approximately $3.12/24 hours (for heavy container builds)
-    - t4g.2xlarge: 8 vCPU + 32GB memory
+    - The figures below are **us-east-1 on-demand** prices as of 2026-08-31. Other regions vary by up to ~30% (Tokyo is about 1.29x).
+    - t4g.medium: 2 vCPU + 4GB memory, approximately $0.81/24 hours (not recommended for running agents)
+    - t4g.large: 2 vCPU + 8GB memory, approximately $1.61/24 hours (default)
+    - t4g.xlarge: 4 vCPU + 16GB memory, approximately $3.23/24 hours (for heavy container builds)
+    - t4g.2xlarge: 8 vCPU + 32GB memory, approximately $6.45/24 hours
+    - m7g.large: 2 vCPU + 8GB memory, approximately $1.96/24 hours (non-burstable)
+    - m7g.xlarge: 4 vCPU + 16GB memory, approximately $3.92/24 hours
     - On memory: code-server, an agent CLI session, a local agent started by `agentcore dev` and Docker all run at the same time. 4GB (t4g.medium) risks an out-of-memory hang, so 8GB or more is recommended.
 - **InstanceVolumeSize** (Default: 40)
     - EBS volume size in GB.
@@ -96,7 +99,7 @@ Environment variables are automatically configured:
 
 Main costs come from the following resources:
 
-- **EC2 Instance** - Charged based on t4g.large (2 vCPU, 8GB memory) runtime (approximately $1.68 for 24 hours on-demand)
+- **EC2 Instance** - Charged based on t4g.large (2 vCPU, 8GB memory) runtime (approximately $1.61 for 24 hours on-demand in us-east-1)
 - **EBS Volume** - 40GB (default) gp3 storage charges
 - **CloudFront** - Charged based on data transfer volume
 - **Other** - Minimal costs for VPC, Secrets Manager, SNS, etc.
