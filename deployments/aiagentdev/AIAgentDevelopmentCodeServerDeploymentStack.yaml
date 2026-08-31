@@ -26,7 +26,25 @@ Parameters:
     Default: AIAgent Developer
   InstanceType:
     Type: String
-    Default: t4g.medium
+    Default: t4g.xlarge
+    Description: >-
+      Graviton (ARM64) instance type. t4g.xlarge (4 vCPU / 16 GiB) is the default because a
+      code-server session, the language servers, an agent CLI session and a local agent run
+      concurrently; 8 GiB or less risks the OOM killer. Sizes below are ARM64 only, to match
+      the ARM64 AMI this template uses.
+    AllowedValues:
+      # Burstable (Graviton2) - lowest idle cost
+      - t4g.medium    # 2 vCPU / 4 GiB  - too small for a concurrent agent session
+      - t4g.large     # 2 vCPU / 8 GiB
+      - t4g.xlarge    # 4 vCPU / 16 GiB
+      - t4g.2xlarge   # 8 vCPU / 32 GiB
+      # General purpose (Graviton3) - no CPU credit surcharge under sustained load
+      - m7g.large     # 2 vCPU / 8 GiB
+      - m7g.xlarge    # 4 vCPU / 16 GiB
+      - m7g.2xlarge   # 8 vCPU / 32 GiB
+      # Compute optimized (Graviton3)
+      - c7g.xlarge    # 4 vCPU / 8 GiB
+      - c7g.2xlarge   # 8 vCPU / 16 GiB
   InstanceVolumeSize:
     Type: Number
     Default: 40
