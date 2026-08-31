@@ -7,7 +7,7 @@ AI Agent Development Code Server is a pre-configured development environment wit
 ## Key Features
 
 - **Browser-Based Development Environment** - VS Code-compatible development experience via code-server
-- **Pre-Configured Development Tools** - AWS CLI, SAM CLI, Kiro CLI, uv, Docker, and more included by default
+- **Pre-Configured Development Tools** - AgentCore CLI, AWS CLI, SAM CLI, Kiro CLI, Claude Code, uv, Docker, and more included by default
 - **Amazon Bedrock Agent Core Ready** - Pre-configured permissions and tools for agent development
 - **Secure Access via CloudFront** - Safe HTTPS connections
 - **Automated Environment Setup** - Consistent environment provisioning via SSM Document
@@ -73,9 +73,10 @@ Once deployment is complete, access the browser-based development environment us
 
 The development environment comes with the following pre-installed tools:
 
-- **AWS Tools**: AWS CLI v2, AWS SAM CLI, Kiro CLI
+- **AWS Tools**: AgentCore CLI (`agentcore`), AWS CLI v2, AWS SAM CLI, Kiro CLI
+- **AI Coding Tools**: Kiro CLI, Claude Code (`claude`)
 - **Development Tools**: Git, Docker, Python, UV, NVM (Node.js LTS, NPM)
-- **Editor**: Code-Server
+- **Editor**: Code-Server (bundled with Claude Code, Python, Ruff and YAML extensions)
 
 Environment variables are automatically configured:
 

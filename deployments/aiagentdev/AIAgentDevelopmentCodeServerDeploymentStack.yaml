@@ -38,8 +38,8 @@ Parameters:
     Default: 'https://github.com/aws-samples/sample-amazon-bedrock-agentcore-onboarding.git'
   EnableAdministratorAccess:
     Type: String
-    Default: 'false'
-    Description: Attach AdministratorAccess policy to instance role (required for CDK deployments)
+    Default: 'true'
+    Description: Attach AdministratorAccess policy to instance role (required for AgentCore CLI / CDK deployments)
     AllowedValues:
       - 'true'
       - 'false'
@@ -342,7 +342,7 @@ Resources:
                   sudo -u $USERNAME tee -a /home/$USERNAME/.bashrc > /dev/null << 'EOF'
                   eval "$(uv generate-shell-completion bash)"
                   EOF
-          - name: InstallNVM
+          - name: InstallNodeAndAgentCoreCLI
             action: aws:runShellScript
             inputs:
               runCommand:
@@ -350,11 +350,18 @@ Resources:
                   USERNAME=$(cat /etc/aiagentdev-username)
                   sudo -u $USERNAME curl -fsSL https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.1/install.sh -o /tmp/nvm_install.sh
                   sudo -u $USERNAME bash /tmp/nvm_install.sh
+                  # The CLIs are installed in the same shell as "nvm use": nvm puts node and
+                  # npm on PATH only for the current shell, and each SSM step runs in a new one.
                   sudo -u $USERNAME bash <<EOF
                   export NVM_DIR="/home/$USERNAME/.nvm"
                   source "\$NVM_DIR/nvm.sh"
                   nvm install --lts
                   nvm use --lts
+                  # --allow-scripts: npm >=11 blocks postinstall by default, and the Claude Code
+                  # postinstall is what selects the arm64 native binary for this instance.
+                  npm install -g --allow-scripts=@aws/agentcore,@anthropic-ai/claude-code @aws/agentcore @anthropic-ai/claude-code
+                  agentcore --version
+                  claude --version
                   EOF
           - name: CloneRepo
             action: aws:runShellScript
@@ -416,12 +423,12 @@ Resources:
                   function install_extension() {
                     local extension_name=$1
                     echo "Installing extension: $extension_name"
-                    if ! sudo -u $USERNAME --login code-editor-server --install-extension "$extension_name" --force; then
+                    if ! sudo -u $USERNAME --login code-server --install-extension "$extension_name" --force; then
                         echo "Failed to install $extension_name"
                         return 1
                     fi
 
-                    if sudo -u $USERNAME --login code-editor-server --list-extensions | grep -qi "$extension_name"; then
+                    if sudo -u $USERNAME --login code-server --list-extensions | grep -qi "$extension_name"; then
                         echo "Successfully installed $extension_name"
                     else
                         echo "Extension $extension_name not found in installed list"
@@ -429,17 +436,18 @@ Resources:
                     fi
                     return 0
                   }
-                  install_extension "AmazonWebServices.aws-toolkit-vscode" || exit 1
-                  install_extension "AmazonWebServices.amazon-q-vscode" || exit 1
-                  install_extension "ms-vscode.live-server" || exit 1
-                  install_extension "synedra.auto-run-command" || exit 1
+                  install_extension "anthropic.claude-code" || exit 1
+                  install_extension "ms-python.python" || exit 1
+                  install_extension "ms-python.debugpy" || exit 1
+                  install_extension "charliermarsh.ruff" || exit 1
+                  install_extension "redhat.vscode-yaml" || exit 1
           - name: StartServices
             action: aws:runShellScript
             inputs:
               runCommand:
                 - |
                   USERNAME=$(cat /etc/aiagentdev-username)
-                  systemctl start code-server@$USERNAME
+                  systemctl restart code-server@$USERNAME
                   systemctl start docker
 
   CodeEditorInstance:
