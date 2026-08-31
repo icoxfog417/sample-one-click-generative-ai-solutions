@@ -45,8 +45,9 @@ You can configure the following parameters during deployment:
 - **UserFullName** (Default: AIAgent Developer)
     - Full name used for Git configuration.
 - **InstanceType** (Default: t4g.large)
-    - EC2 instance type. Uses ARM64 architecture (Graviton) instances. Use the following as a guide for performance and pricing. We recommend checking the [latest pricing information](https://aws.amazon.com/ec2/pricing/on-demand/). Consider m7g/c7g if you need a higher-performance environment.
-    - The figures below are **us-east-1 on-demand** prices as of 2026-08-31. Other regions vary by up to ~30% (Tokyo is about 1.29x).
+    - EC2 instance type. Uses ARM64 architecture (Graviton) instances. Use the following as a guide for performance and pricing. Consider m7g/c7g if you need a higher-performance environment.
+    - The figures below are a guide to **us-east-1 on-demand** pricing (AWS Price List API, as of 2026-08-31).
+    - **Prices change over time and differ by region** (Tokyo is about 1.29x us-east-1). Always confirm actual cost against the [latest pricing](https://aws.amazon.com/ec2/pricing/on-demand/), and against the current exchange rate if you are budgeting in another currency.
     - t4g.medium: 2 vCPU + 4GB memory, approximately $0.81/24 hours (not recommended for running agents)
     - t4g.large: 2 vCPU + 8GB memory, approximately $1.61/24 hours (default)
     - t4g.xlarge: 4 vCPU + 16GB memory, approximately $3.23/24 hours (for heavy container builds)

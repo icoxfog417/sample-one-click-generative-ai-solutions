@@ -45,8 +45,9 @@ AI Agent Development Code Server は、Amazon Bedrock Agent Core を活用した
 - **UserFullName** (デフォルト: AIAgent Developer)
     - Git 設定に使用されるフルネームです。
 - **InstanceType** (デフォルト: t4g.large)
-    - EC2 インスタンスタイプです。ARM64 アーキテクチャ (Graviton) のインスタンスを使用します。性能、価格は以下を目安にしてください。特に価格は[最新の情報](https://aws.amazon.com/jp/ec2/pricing/on-demand/)を確認することを推奨します。ハイパフォーマンスな環境が必要な場合、m7g/c7g を検討ください。
-    - 以下は **us-east-1 のオンデマンド料金** (2026-08-31 時点、1 USD = 160 円換算) です。リージョンにより 3 割ほど変動します (例: 東京リージョンは約 1.29 倍)。
+    - EC2 インスタンスタイプです。ARM64 アーキテクチャ (Graviton) のインスタンスを使用します。性能と価格は以下を目安にしてください。ハイパフォーマンスな環境が必要な場合、m7g/c7g を検討ください。
+    - 以下は **us-east-1 のオンデマンド料金** の目安です (AWS Price List API 2026-08-31 時点、1 USD = 160 円換算)。
+    - **価格・為替レートはいずれも変動します。** また料金はリージョンによって異なります (例: 東京リージョンは us-east-1 の約 1.29 倍)。実際の費用は必ず[最新の料金](https://aws.amazon.com/jp/ec2/pricing/on-demand/)とその時点の為替レートでご確認ください。
     - t4g.medium : 2 vCPU + 4G メモリ, 24 時間で 130 円ぐらい (エージェント実行には非推奨)
     - t4g.large : 2 vCPU + 8G メモリ, 24 時間で 260 円ぐらい (デフォルト)
     - t4g.xlarge : 4 vCPU + 16G メモリ, 24 時間で 520 円ぐらい (コンテナビルドを多用する場合)
